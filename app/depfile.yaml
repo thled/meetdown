@@ -1,0 +1,34 @@
+paths:
+  - ./src
+layers:
+  - name: Application
+    collectors:
+      - type: className
+        regex: .*\\Application\\.*
+  - name: Domain
+    collectors:
+      - type: className
+        regex: .*\\Domain\\.*
+  - name: Infrastructure
+    collectors:
+      - type: className
+        regex: .*\\Infrastructure\\.*
+  - name: Vendor
+    collectors:
+      - type: bool
+        must:
+          - type: className
+            regex: .+\\.* # must have a namespace
+        must_not:
+          - type: className
+            regex: ^MeetDown\\.* # our project
+ruleset:
+  Infrastructure:
+    - Vendor
+    - Application
+    - Domain
+  Application:
+    - Vendor
+    - Domain
+  Domain:
+    - Vendor

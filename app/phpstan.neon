@@ -1,0 +1,30 @@
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    level: 'max'
+    paths:
+        - 'src'
+        - 'tests'
+    excludes_analyse:
+        - 'src/Shared/Infrastructure/Symfony/Kernel.php'
+        - 'tests/bootstrap.php'
+    bootstrapFiles:
+        - './bin/.phpunit/phpunit/vendor/autoload.php'
+        - './vendor/autoload.php'
+    inferPrivatePropertyTypeFromConstructor: true
+    ignoreErrors:
+        # The following ignored errors are too strict.
+        - '#^Anonymous function should have native return typehint "[^"]+".$#'
+        - '#^Call to static method PHPUnit\\Framework\\Assert::assertInstanceOf\(\) .* will always evaluate to true.$#'
+        # The following ignored errors are from "thecodingmachine/phpstan-strict-rules" and are too strict.
+        - '#caught "Exception" must be rethrown#'
+        # The following ignored errors are from "ergebnis/phpstan-rules" and are too strict.
+        - '#^Class "[^"]+" is not allowed to extend "[^"]+".$#'
+        - '#^Method [^"]+ has a nullable return type declaration.$#'
+        - '#^Closure has a nullable return type declaration.$#'
+        - '#^Method [^"]+ has parameter [^"]+ with a nullable type declaration.$#'
+        - '#^Closure has parameter [^"]+ with a nullable type declaration.$#'
+        - '#^Method [^"]+ has parameter [^"]+ with null as default value.$#'
+        - '#^Constructor in [^"]+ has parameter [^"]+ with default value.$#'
+        - '#^Control structures using switch should not be used.$#'
+        # The following ignored errors are caused by Pest test framework.
+        - '#^Call to an undefined method Pest\\Expectations\\Expectation|Pest\\Expectations\\Support\\Extendable#'
