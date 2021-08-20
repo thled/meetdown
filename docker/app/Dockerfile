@@ -1,3 +1,15 @@
+FROM alpine:3.14 as builder
+
+RUN apk add --no-cache \
+    file git autoconf automake libtool gettext gettext-dev make g++ texinfo curl
+
+WORKDIR /tools
+RUN \
+    # build fswatch
+    wget https://github.com/emcrisostomo/fswatch/releases/download/1.16.0/fswatch-1.16.0.tar.gz
+    RUN tar xvf fswatch-1.16.0.tar.gz 
+    RUN cd fswatch-1.16.0 && ./configure && make && make install
+
 FROM php:8.0-fpm-alpine3.14 as base
 
 # install utilities
@@ -33,6 +45,13 @@ RUN composer global require \
     vimeo/psalm \
     qossmic/deptrac-shim
 
+# install fswatch for pest watcher
+COPY --from=builder /usr/local/bin/fswatch /usr/local/bin/fswatch
+COPY --from=builder /usr/local/lib/libfswatch.so.11 /usr/local/lib/libfswatch.so.11
+COPY --from=builder /usr/lib/libintl.so.8 /usr/lib/libintl.so.8
+COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
+COPY --from=builder /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
+
 # set aliases
 ENV ENV="/home/phpuser/.profile"
 RUN echo 'echo -e "Welcome! The following aliases exist:\n \
@@ -50,9 +69,9 @@ run_ci (rc): Run pipeline steps."' >> ~/.profile \
         echo "DEPTRAC:"; deptrac --fail-on-uncovered; echo "PSALM:"; psalm; echo "PHPSTAN:"; phpstan analyse; \
         }' >> ~/.profile \
     && echo 'alias ra=run_analyse' >> ~/.profile \
-    && echo 'alias run_test="/usr/src/app/vendor/bin/pest"' >> ~/.profile \
+    && echo 'alias run_test="/app/vendor/bin/pest"' >> ~/.profile \
     && echo 'alias rt=run_test' >> ~/.profile \
-    && echo 'alias run_watch="/usr/src/app/vendor/bin/pest --watch --testsuite=unit"' >> ~/.profile \
+    && echo 'alias run_watch="/app/vendor/bin/pest --watch --testsuite=unit"' >> ~/.profile \
     && echo 'alias rw=run_watch' >> ~/.profile \
     && echo 'run_ci() { run_lint; run_analyse; run_test; }' >> ~/.profile \
     && echo 'alias rc=run_ci' >> ~/.profile
