@@ -9,6 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class HealthCheck extends AbstractController {
     #[Route("/health", name: "health_check")]
     public function check(): JsonResponse {
-        return $this->json([]);
+        return $this->json(["status" => "up"]);
     }
 }
