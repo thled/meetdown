@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MeetDown\Controller;
+namespace MeetDown\Shared\Infrastructure\Symfony\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
