@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Integration\Shared;
+namespace Tests\Integration\Shared;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use function json_encode;
