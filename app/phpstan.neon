@@ -8,7 +8,6 @@ parameters:
         - 'src/Shared/Infrastructure/Symfony/Kernel.php'
         - 'tests/bootstrap.php'
     bootstrapFiles:
-        - './bin/.phpunit/phpunit/vendor/autoload.php'
         - './vendor/autoload.php'
     inferPrivatePropertyTypeFromConstructor: true
     ignoreErrors:
@@ -27,4 +26,4 @@ parameters:
         - '#^Constructor in [^"]+ has parameter [^"]+ with default value.$#'
         - '#^Control structures using switch should not be used.$#'
         # The following ignored errors are caused by Pest test framework.
-        - '#^Call to an undefined method Pest\\Expectations\\Expectation|Pest\\Expectations\\Support\\Extendable#'
+        - '#^Call to an undefined method Pest\\Expectation|Pest\\Support\\Extendable#'
