@@ -54,7 +54,11 @@ jobs:
         working-directory: ./app
         run: php-cs-fixer fix --allow-risky=yes -vvv --dry-run
       - name: DEBUG
-        run: ls -lah /home/runner/.composer
+        run: ls -lah /home/runner/.composer/vendor
+      - name: DEBUG2
+        run: ls -lah /home/runner/.composer/vendor/sensiolabs-de
+      - name: DEBUG3
+        run: ls -lah /home/runner/.composer/vendor/sensiolabs-de/bin
       - name: Analyse with Deptrac
         working-directory: ./app
         run: deptrac --fail-on-uncovered
