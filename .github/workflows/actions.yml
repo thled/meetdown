@@ -36,9 +36,12 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: DEBUG
+        working-directory: ./app
         run: ls -lah
       - name: Bootstrap app
-        run: composer bootstrap
+        working-directory: ./app
+        run: composer run-script bootstrap
       - name: Run tests
+        working-directory: ./app
         run: vendor/bin/pest
 
