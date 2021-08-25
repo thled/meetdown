@@ -54,6 +54,7 @@ jobs:
         working-directory: ./app
         run: composer run-script bootstrap
       - name: Run lint
+        working-directory: ./app
         run: php-cs-fixer fix --allow-risky=yes -vvv --dry-run
       - name: Run tests
         working-directory: ./app
