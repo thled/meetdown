@@ -47,16 +47,22 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
-      - name: DEBUG
-        working-directory: ./app
-        run: ls -lah
       - name: Bootstrap app
         working-directory: ./app
         run: composer run-script bootstrap
-      - name: Run lint
+      - name: Lint
         working-directory: ./app
         run: php-cs-fixer fix --allow-risky=yes -vvv --dry-run
-      - name: Run tests
+      - name: Analyse with Deptrac
+        working-directory: ./app
+        run: deptrac --fail-on-uncovered
+      - name: Analyse with PHPStan
+        working-directory: ./app
+        run: phpstan analyse
+      - name: Analyse with Psalm
+        working-directory: ./app
+        run: psalm
+      - name: Test
         working-directory: ./app
         run: vendor/bin/pest
 
