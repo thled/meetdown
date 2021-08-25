@@ -10,6 +10,14 @@ RUN \
     RUN tar xvf fswatch-1.16.0.tar.gz 
     RUN cd fswatch-1.16.0 && ./configure && make && make install
 
+RUN \
+    # pack libs for fswatch
+    mkdir /tools/fswatch-libs \
+    && cp /usr/local/lib/libfswatch.so.11 /tools/fswatch-libs \
+    && cp /usr/lib/libintl.so.8 /tools/fswatch-libs \
+    && cp /usr/lib/libstdc++.so.6 /tools/fswatch-libs \
+    && cp /usr/lib/libgcc_s.so.1 /tools/fswatch-libs
+
 FROM php:8.0-fpm-alpine3.14 as base
 
 # install utilities
@@ -22,11 +30,15 @@ RUN adduser -D -g '' phpuser
 USER phpuser
 
 # install composer
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
 FROM base as dev
+
+# install fswatch for pest watcher
+COPY --from=builder /tools/fswatch-libs/ /usr/lib
+COPY --from=builder /usr/local/bin/fswatch /usr/bin/fswatch
 
 # install tools from composer
 ENV PATH="/home/phpuser/.composer/vendor/bin:${PATH}"
@@ -44,13 +56,6 @@ RUN composer global require \
     thecodingmachine/phpstan-safe-rule \
     vimeo/psalm \
     qossmic/deptrac-shim
-
-# install fswatch for pest watcher
-COPY --from=builder /usr/local/bin/fswatch /usr/local/bin/fswatch
-COPY --from=builder /usr/local/lib/libfswatch.so.11 /usr/local/lib/libfswatch.so.11
-COPY --from=builder /usr/lib/libintl.so.8 /usr/lib/libintl.so.8
-COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
-COPY --from=builder /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 
 # set aliases
 ENV ENV="/home/phpuser/.profile"
