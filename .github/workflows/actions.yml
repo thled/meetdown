@@ -36,7 +36,7 @@ jobs:
             thecodingmachine/phpstan-strict-rules,
             thecodingmachine/phpstan-safe-rule,
             psalm,
-            sensiolabs-de/deptrac
+            qossmic/deptrac-shim
           extensions: ctype, iconv
       - name: Get composer cache directory
         id: composer-cache
@@ -60,7 +60,7 @@ jobs:
       - name: DEBUG3
         run: ls -lah /home/runner/.composer/vendor/sensiolabs-de/deptrac
       - name: DEBUG4
-        run: ls -lah /home/runner/.composer/vendor/sensiolabs-de/deptrac/bin
+        run: ls -lah /home/runner/.composer/vendor/bin
       - name: Analyse with Deptrac
         working-directory: ./app
         run: deptrac --fail-on-uncovered
