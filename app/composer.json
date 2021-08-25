@@ -54,6 +54,18 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "bootstrap": [
+            "cp .env .env.local",
+            "@composer install",
+            "@php bin/console doctrine:database:create --if-not-exists",
+            "@php bin/console doctrine:migrations:migrate --no-interaction"
+        ],
+        "reset": [
+            "@composer install",
+            "@php bin/console doctrine:database:drop --force",
+            "@php bin/console doctrine:database:create --if-not-exists",
+            "@php bin/console doctrine:migrations:migrate --no-interaction"
         ]
     },
     "conflict": {
