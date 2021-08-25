@@ -58,7 +58,9 @@ jobs:
       - name: DEBUG2
         run: ls -lah /home/runner/.composer/vendor/sensiolabs-de
       - name: DEBUG3
-        run: ls -lah /home/runner/.composer/vendor/sensiolabs-de/bin
+        run: ls -lah /home/runner/.composer/vendor/sensiolabs-de/deptrac
+      - name: DEBUG4
+        run: ls -lah /home/runner/.composer/vendor/sensiolabs-de/deptrac/bin
       - name: Analyse with Deptrac
         working-directory: ./app
         run: deptrac --fail-on-uncovered
