@@ -25,18 +25,18 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: 
-            - php-cs-fixer
-            - phpstan
-            - phpstan/extension-installer
-            - phpstan/phpstan-strict-rules
-            - phpstan/phpstan-phpunit
-            - phpstan/phpstan-deprecation-rules
-            - ergebnis/phpstan-rules
-            - thecodingmachine/phpstan-strict-rules
-            - thecodingmachine/phpstan-safe-rule
-            - psalm
-            - sensiolabs-de/deptrac
+          tools: |
+            php-cs-fixer,
+            phpstan,
+            phpstan/extension-installer,
+            phpstan/phpstan-strict-rules,
+            phpstan/phpstan-phpunit,
+            phpstan/phpstan-deprecation-rules,
+            ergebnis/phpstan-rules,
+            thecodingmachine/phpstan-strict-rules,
+            thecodingmachine/phpstan-safe-rule,
+            psalm,
+            sensiolabs-de/deptrac
           extensions: ctype, iconv
       - name: Get composer cache directory
         id: composer-cache
