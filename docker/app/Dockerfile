@@ -86,7 +86,7 @@ FROM base as prod
 ENV APP_ENV=prod
 ENV DATABASE_URL="mysql://db_user:db_pass@db_pod:3306/db?serverVersion=10.6"
 
-COPY app/ .
+COPY --chown=phpuser app/ .
 
-RUN composer install --no-dev --prefer-dist --no-progress --no-suggest --no-interaction
+RUN composer install --no-dev --prefer-dist --no-progress --no-interaction
 
