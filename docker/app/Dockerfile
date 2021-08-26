@@ -1,5 +1,6 @@
 FROM alpine:3.14 as builder
 
+# install utilities
 RUN apk add --no-cache \
     file git autoconf automake libtool gettext gettext-dev make g++ texinfo curl
 
@@ -35,6 +36,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 
 FROM base as dev
+
+# configure php
+COPY docker/app/php_dev.ini /usr/local/etc/php/php.ini
 
 # install fswatch for pest watcher
 COPY --from=builder /tools/fswatch-libs/ /usr/lib
@@ -83,10 +87,16 @@ run_ci (rc): Run pipeline steps."' >> ~/.profile \
 
 FROM base as prod
 
+# set prod env vars
 ENV APP_ENV=prod
 ENV DATABASE_URL="mysql://db_user:db_pass@db_pod:3306/db?serverVersion=10.6"
 
+# configure php
+COPY docker/app/php_prod.ini /usr/local/etc/php/php.ini
+
+# add application code
 COPY --chown=phpuser app/ .
 
+# install dependencies
 RUN composer install --no-dev --prefer-dist --no-progress --no-interaction
 

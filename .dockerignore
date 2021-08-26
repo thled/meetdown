@@ -15,7 +15,6 @@
 **/docker-compose.yml
 **/Dockerfile
 **/Thumbs.db
-docker/
 docs/
 app/.*
 !app/.env
