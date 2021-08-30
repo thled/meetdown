@@ -94,9 +94,10 @@ ENV DATABASE_URL="mysql://db_user:db_pass@db_pod:3306/db?serverVersion=10.6"
 # configure php
 COPY docker/app/php_prod.ini /usr/local/etc/php/php.ini
 
+# install dependencies (separate copy step for caching)
+COPY --chown=phpuser app/composer.json app/composer.lock app/symfony.lock ./
+RUN composer install --no-dev --prefer-dist --no-progress --no-interaction --no-scripts
+
 # add application code
 COPY --chown=phpuser app/ .
-
-# install dependencies
-RUN composer install --no-dev --prefer-dist --no-progress --no-interaction
 

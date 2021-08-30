@@ -7,30 +7,32 @@ services:
     restart: unless-stopped
     networks: 
       - meetdownnet
-    volumes:
-      - "./app/:/app"
+    # volumes:
+    #   - "./app/:/app"
     depends_on:
       - db
       - es
 
   web:
     build:
-      context: docker/web
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: docker/web/Dockerfile
       target: dev
     restart: unless-stopped
     networks: 
       - meetdownnet
     ports:
       - "${NGINX_PORT}:80"
+    volumes:
+      - "./app/public/:/app"
     depends_on:
       - app
 
   db:
     image: mariadb:10.6
     build:
-      context: docker/db
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: docker/db/Dockerfile
       target: dev
     restart: unless-stopped
     networks: 
