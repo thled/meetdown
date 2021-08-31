@@ -1,23 +1,12 @@
 FROM alpine:3.14 as builder
 
-# install utilities
-RUN apk add --no-cache \
-    file git autoconf automake libtool gettext gettext-dev make g++ texinfo curl
-
 WORKDIR /tools
-RUN \
-    # build fswatch
-    wget https://github.com/emcrisostomo/fswatch/releases/download/1.16.0/fswatch-1.16.0.tar.gz
-    RUN tar xvf fswatch-1.16.0.tar.gz 
-    RUN cd fswatch-1.16.0 && ./configure && make && make install
 
 RUN \
-    # pack libs for fswatch
-    mkdir /tools/fswatch-libs \
-    && cp /usr/local/lib/libfswatch.so.11 /tools/fswatch-libs \
-    && cp /usr/lib/libintl.so.8 /tools/fswatch-libs \
-    && cp /usr/lib/libstdc++.so.6 /tools/fswatch-libs \
-    && cp /usr/lib/libgcc_s.so.1 /tools/fswatch-libs
+    # install watcher
+    wget --output-document watcher.tar.xz \
+    https://github.com/watchexec/watchexec/releases/download/cli-v1.17.1/watchexec-1.17.1-x86_64-unknown-linux-musl.tar.xz \
+    && tar xf watcher.tar.xz
 
 FROM php:8.0-fpm-alpine3.14 as base
 
@@ -40,9 +29,8 @@ FROM base as dev
 # configure php
 COPY docker/app/php_dev.ini /usr/local/etc/php/php.ini
 
-# install fswatch for pest watcher
-COPY --from=builder /tools/fswatch-libs/ /usr/lib
-COPY --from=builder /usr/local/bin/fswatch /usr/bin/fswatch
+# install watchexec
+COPY --from=builder /tools/watchexec-1.17.1-x86_64-unknown-linux-musl/watchexec /usr/bin/
 
 # install tools from composer
 ENV PATH="/home/phpuser/.composer/vendor/bin:${PATH}"
@@ -80,7 +68,10 @@ run_ci (rc): Run pipeline steps."' >> ~/.profile \
     && echo 'alias ra=run_analyse' >> ~/.profile \
     && echo 'alias run_test="/app/vendor/bin/pest"' >> ~/.profile \
     && echo 'alias rt=run_test' >> ~/.profile \
-    && echo 'alias run_watch="/app/vendor/bin/pest --watch --testsuite=unit"' >> ~/.profile \
+    && echo 'alias run_watch="watchexec -c \
+        -w /app/src \
+        -w /app/tests \
+        \"/app/vendor/bin/pest --testsuite=unit\""' >> ~/.profile \
     && echo 'alias rw=run_watch' >> ~/.profile \
     && echo 'run_ci() { run_lint; run_analyse; run_test; }' >> ~/.profile \
     && echo 'alias rc=run_ci' >> ~/.profile
