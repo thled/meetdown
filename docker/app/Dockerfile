@@ -63,7 +63,7 @@ run_ci (rc): Run pipeline steps."' >> ~/.profile \
     && echo 'alias run_fmt="php-cs-fixer fix --allow-risky=yes"' >> ~/.profile \
     && echo 'alias rf=run_fmt' >> ~/.profile \
     && echo 'run_analyse() { \
-        echo "DEPTRAC:"; deptrac --fail-on-uncovered; echo "PSALM:"; psalm; echo "PHPSTAN:"; phpstan analyse; \
+        echo "DEPTRAC:"; deptrac --fail-on-uncovered; echo "PSALM:"; psalm; echo "PHPSTAN:"; phpstan; \
         }' >> ~/.profile \
     && echo 'alias ra=run_analyse' >> ~/.profile \
     && echo 'alias run_test="/app/vendor/bin/pest"' >> ~/.profile \
@@ -71,7 +71,8 @@ run_ci (rc): Run pipeline steps."' >> ~/.profile \
     && echo 'alias run_watch="watchexec -c \
         -w /app/src \
         -w /app/tests \
-        \"/app/vendor/bin/pest --testsuite=unit\""' >> ~/.profile \
+        \"phpstan && \
+        /app/vendor/bin/pest --testsuite=unit\""' >> ~/.profile \
     && echo 'alias rw=run_watch' >> ~/.profile \
     && echo 'run_ci() { run_lint; run_analyse; run_test; }' >> ~/.profile \
     && echo 'alias rc=run_ci' >> ~/.profile
