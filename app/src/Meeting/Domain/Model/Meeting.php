@@ -5,14 +5,14 @@ namespace MeetDown\Meeting\Domain\Model;
 final class Meeting {
     private function __construct(
         private Title $title,
-        private string $date,
+        private Date $date,
         private string $time,
     ) {
     }
 
     public static function create(
         Title $title,
-        string $date,
+        Date $date,
         string $time,
     ): self {
         return new self($title, $date, $time);
@@ -22,7 +22,7 @@ final class Meeting {
     public function getData(): array {
         return [
             "title" => $this->title->asString(),
-            "date" => $this->date,
+            "date" => $this->date->asString(),
             "time" => $this->time,
         ];
     }
