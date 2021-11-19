@@ -45,7 +45,6 @@ RUN composer global require \
     phpstan/phpstan-deprecation-rules \
     ergebnis/phpstan-rules \
     thecodingmachine/phpstan-strict-rules \
-    thecodingmachine/phpstan-safe-rule \
     vimeo/psalm \
     qossmic/deptrac-shim
 

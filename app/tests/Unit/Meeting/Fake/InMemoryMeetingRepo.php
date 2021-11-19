@@ -20,12 +20,12 @@ final class InMemoryMeetingRepo implements MeetingRepo {
                 $meetingData = $meeting->getData();
 
                 return new UpcomingMeeting(
-                    $meetingData["title"],
-                    $meetingData["date"],
-                    $meetingData["time"],
+                    is_string($meetingData["title"]) ? $meetingData["title"] : "",
+                    is_string($meetingData["date"]) ? $meetingData["date"] : "",
+                    is_string($meetingData["time"]) ? $meetingData["time"] : "",
                 );
             },
-            $this->meetings
+            $this->meetings,
         );
     }
 }
