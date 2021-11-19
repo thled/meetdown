@@ -2,7 +2,7 @@
 
 namespace MeetDown\Meeting\Application;
 
-use MeetDown\Meeting\Domain\Model\{Meeting, MeetingRepo};
+use MeetDown\Meeting\Domain\Model\{Meeting, MeetingRepo, Title};
 
 final class ScheduleMeetingHandler {
     public function __construct(private MeetingRepo $meetingRepo) {
@@ -10,7 +10,7 @@ final class ScheduleMeetingHandler {
 
     public function execute(ScheduleMeeting $command): void {
         $this->meetingRepo->save(Meeting::create(
-            $command->getTitle(),
+            Title::fromString($command->getTitle()),
             $command->getDate(),
             $command->getTime(),
         ));
