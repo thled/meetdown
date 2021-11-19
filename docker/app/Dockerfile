@@ -45,7 +45,6 @@ RUN composer global require \
     phpstan/phpstan-deprecation-rules \
     ergebnis/phpstan-rules \
     thecodingmachine/phpstan-strict-rules \
-    vimeo/psalm \
     qossmic/deptrac-shim
 
 # set aliases
@@ -62,7 +61,7 @@ run_ci (rc): Run pipeline steps."' >> ~/.profile \
     && echo 'alias run_fmt="php-cs-fixer fix --allow-risky=yes"' >> ~/.profile \
     && echo 'alias rf=run_fmt' >> ~/.profile \
     && echo 'run_analyse() { \
-        echo "DEPTRAC:"; deptrac --fail-on-uncovered; echo "PSALM:"; psalm; echo "PHPSTAN:"; phpstan; \
+        echo "DEPTRAC:"; deptrac --fail-on-uncovered; echo "PHPSTAN:"; phpstan; \
         }' >> ~/.profile \
     && echo 'alias ra=run_analyse' >> ~/.profile \
     && echo 'alias run_test="/app/vendor/bin/pest"' >> ~/.profile \
